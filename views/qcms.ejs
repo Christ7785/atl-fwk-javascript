@@ -1,0 +1,17 @@
+<%- include('header') -%>
+
+<p>Mes QCMS disponibles</p>
+<ul>
+    <% for (let qcm of qcms) { %>
+        <li>
+            <%= qcm.name %> (<%= qcm.subject %>) : <%= qcm.nbpoints %> points
+            <ul>
+                <% for (let question of qcm.questions) { %>
+                    <li><%= question %></li>
+                <% } %>
+            </ul>
+        </li>
+    <% } %>
+</ul>
+
+<%- include('footer') -%>

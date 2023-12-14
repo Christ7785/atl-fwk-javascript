@@ -1,0 +1,24 @@
+<!-- qcms.ejs -->
+
+<%- include('header') -%>
+
+<p>Mes QCMS disponibles</p>
+<ul>
+    <% for (let qcm of qcms) { %>
+        <li>
+            <%= qcm.name %> (<%= qcm.subject %>) : <%= qcm.nbpoints %> points
+            <ul>
+                <% for (let question of qcm.questions) { %>
+                    <li><%= question %></li>
+                <% } %>
+            </ul>
+            <form action="/qcm/<%= qcm.id %>/add-question" method="POST">
+                <label for="question">Ajouter une question :</label>
+                <input type="text" id="question" name="question" required>
+                <button type="submit">Ajouter</button>
+            </form>
+        </li>
+    <% } %>
+</ul>
+
+<%- include('footer') -%>
