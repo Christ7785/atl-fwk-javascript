@@ -1,7 +1,6 @@
 // id, name, theme, subject, author, nbpoints
 
 class Qcm {
-
     #id;
     #name;
     #theme;
@@ -17,7 +16,7 @@ class Qcm {
         this.#subject = qcmToCreate.subject;
         this.#author = qcmToCreate.author;
         this.#nbpoints = qcmToCreate.nbpoints;
-        this.#questions = [];
+        this.#questions = qcmToCreate.questions;
     }
 
     get id() {
@@ -52,13 +51,9 @@ class Qcm {
         return this.#questions;
     }
 
-    addQuestion(question) {
-        this.#questions.push(question);
-    }
-
     toJSON(key) {
         console.log(key);
-        return {id: this.#id, name: this.#name};
+        return { id: this.#id, name: this.#name };
     }
 }
 

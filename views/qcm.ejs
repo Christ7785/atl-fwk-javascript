@@ -1,24 +1,70 @@
-<!-- qcms.ejs -->
-
 <%- include('header') -%>
 
-<p>Mes QCMS disponibles</p>
-<ul>
-    <% for (let qcm of qcms) { %>
-        <li>
-            <%= qcm.name %> (<%= qcm.subject %>) : <%= qcm.nbpoints %> points
-            <ul>
-                <% for (let question of qcm.questions) { %>
-                    <li><%= question %></li>
+<div class="qcm-info">
+    <h1><%= qcm.name %></h1>
+    <p><strong>Sujet:</strong> <%= qcm.subject %></p>
+    <p><strong>Points:</strong> <%= qcm.nbpoints %></p>
+</div>
+
+<div class="questions-container">
+    <% for (let question of qcm.questions) { %>
+        <div class="question">
+            <h2><%= question.name %></h2>
+            
+            <div class="answers">
+                <% for (let answer of question.answers) { %>
+                    <div class="answer <%= answer.correct ? 'correct' : '' %>">
+                        <%= answer.name %>
+                    </div>
                 <% } %>
-            </ul>
-            <form action="/qcm/<%= qcm.id %>/add-question" method="POST">
-                <label for="question">Ajouter une question :</label>
-                <input type="text" id="question" name="question" required>
-                <button type="submit">Ajouter</button>
-            </form>
-        </li>
+            </div>
+        </div>
     <% } %>
-</ul>
+</div>
+
+<style>
+
+
+    .qcm-info {
+        background: #f4f4f4;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .questions-container {
+        width: 80%;
+        margin: auto;
+        overflow: hidden;
+    }
+
+    .question {
+        background: #fff;
+        color: #333;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .answers {
+        margin-top: 10px;
+    }
+
+    .answer {
+        padding: 8px;
+        margin-bottom: 5px;
+        border-radius: 3px;
+        background: #f8f8f8;
+        border: 1px solid #ddd;
+    }
+
+    .correct {
+        background: #dff0d8;
+        border-color: #d6e9c6;
+        color: #3c763d;
+    }
+</style>
 
 <%- include('footer') -%>

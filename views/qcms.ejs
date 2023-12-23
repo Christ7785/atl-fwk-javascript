@@ -5,11 +5,7 @@
     <% for (let qcm of qcms) { %>
         <li>
             <%= qcm.name %> (<%= qcm.subject %>) : <%= qcm.nbpoints %> points
-            <ul>
-                <% for (let question of qcm.questions) { %>
-                    <li><%= question %></li>
-                <% } %>
-            </ul>
+            <a href="/qcms/<%= qcm.id %>">Voir les questions</a>
         </li>
     <% } %>
 </ul>

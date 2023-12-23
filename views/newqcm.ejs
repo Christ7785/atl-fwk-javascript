@@ -1,40 +1,154 @@
-<!-- newqcm.ejs -->
-
 <form action="/qcms/new" method="POST">
     <div>
         <label for="name">Nom</label>
-        <input type="text" id="name" name="name">
+        <input type="text" id="name" name="name" />
     </div>
     <div>
         <label for="subject">Sujet</label>
-        <input type="text" id="subject" name="subject">
+        <input type="text" id="subject" name="subject" />
     </div>
     <div>
         <label for="nbpoints">Nb points</label>
-        <input type="number" id="nbpoints" name="nbpoints">
+        <input type="number" id="nbpoints" name="nbpoints" />
     </div>
- 
+
     <div id="questions-container">
-
     </div>
+    <button type="button" id="add-question">Add Question</button>
 
-    <button type="button" onclick="addQuestionField()">Ajouter une question</button>
-    <input type="submit" value="Create">
+    <input type="submit" value="Create" />
 </form>
 
-
 <script>
-    let questionCount = 0;
+document.getElementById("add-question").addEventListener("click", function () {
+    const container = document.getElementById("questions-container");
+    const questionDiv = document.createElement("div");
+    questionDiv.className = "question";
 
-    function addQuestionField() {
-        questionCount++;
-        const container = document.getElementById('questions-container');
-        const label = document.createElement('label');
-        label.textContent = `Question ${questionCount}`;
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.name = 'questions[]';
-        container.appendChild(label);
-        container.appendChild(input);
+    questionDiv.innerHTML = `
+        <div>
+            <label>Question</label>
+            <input type="text" name="questions[]">
+            <button type="button" class="add-answer">Add Answer</button>
+        </div>
+        <input type="hidden" name="answers[]" class="answer-input">
+        <div class="answers-container">
+            <!-- Answers will be added here -->
+        </div>
+    `;
+    container.appendChild(questionDiv);
+});
+
+document.addEventListener("click", function (event) {
+    if (event.target && event.target.className === "add-answer") {
+        const answersContainer =
+            event.target.parentNode.nextElementSibling.nextElementSibling;
+        const answerInput = event.target.parentNode.nextElementSibling;
+        const answerDiv = document.createElement("div");
+        answerDiv.className = "answer";
+
+        answerDiv.innerHTML = `
+            <input type="text" class="individual-answer">
+            <label>
+                <input type="checkbox" class="correct-answer"> Correct Answer
+            </label>
+        `;
+        answersContainer.appendChild(answerDiv);
+
+        updateAnswers(answerInput, answersContainer);
     }
+});
+
+function updateAnswers(answerInput, answersContainer) {
+    let answers = [];
+    let correctAnswers = [];
+
+    const answerElements = answersContainer.querySelectorAll(".individual-answer");
+    const correctElements = answersContainer.querySelectorAll(".correct-answer");
+
+    answerElements.forEach((input, index) => {
+        answers.push(input.value);
+        const isChecked = correctElements[index] && correctElements[index].checked;
+        correctAnswers.push(isChecked ? "true" : "false");
+    });
+
+    answerInput.value = answers.join(";") + "|" + correctAnswers.join(";");
+}
+
+
 </script>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        padding: 20px;
+    }
+
+    form {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    div {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .question {
+        border: 1px solid #ccc;
+        padding: 15px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+    }
+
+    .add-answer {
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .add-answer:hover {
+        background-color: #218838;
+    }
+    #add-question {
+        margin-top: 15px;
+        margin-bottom: 10px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
