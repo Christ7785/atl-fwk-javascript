@@ -29,9 +29,13 @@ function transformFormDataToJson(formData) {
 
     if (formData.questions && Array.isArray(formData.questions)) {
         formData.questions.forEach((question, questionIndex) => {
-            if (question !== undefined && formData.answers[questionIndex] !== undefined) {
-                const splitAnswers = formData.answers[questionIndex].split("|")[0].split(";");
-                const splitCorrect = formData.answers[questionIndex].split("|")[1]?.split(";") || [];
+            if (question && formData.answers[questionIndex]) {
+                const splitAnswers = formData.answers[questionIndex]
+                    .split("|")[0]
+                    .split(";");
+                const splitCorrect = formData.answers[questionIndex].split("|")[1]
+                    ? formData.answers[questionIndex].split("|")[1].split(";")
+                    : [];
 
                 const questionObj = {
                     name: question,

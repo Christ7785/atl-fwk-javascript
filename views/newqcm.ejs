@@ -20,63 +20,70 @@
 </form>
 
 <script>
-document.getElementById("add-question").addEventListener("click", function () {
-    const container = document.getElementById("questions-container");
-    const questionDiv = document.createElement("div");
-    questionDiv.className = "question";
-
-    questionDiv.innerHTML = `
-        <div>
-            <label>Question</label>
-            <input type="text" name="questions[]">
-            <button type="button" class="add-answer">Add Answer</button>
-        </div>
-        <input type="hidden" name="answers[]" class="answer-input">
-        <div class="answers-container">
-            <!-- Answers will be added here -->
-        </div>
-    `;
-    container.appendChild(questionDiv);
-});
-
-document.addEventListener("click", function (event) {
-    if (event.target && event.target.className === "add-answer") {
-        const answersContainer =
-            event.target.parentNode.nextElementSibling.nextElementSibling;
-        const answerInput = event.target.parentNode.nextElementSibling;
-        const answerDiv = document.createElement("div");
-        answerDiv.className = "answer";
-
-        answerDiv.innerHTML = `
-            <input type="text" class="individual-answer">
-            <label>
-                <input type="checkbox" class="correct-answer"> Correct Answer
-            </label>
+    function addQuestionContainer() {
+        const container = document.getElementById("questions-container");
+        const questionDiv = document.createElement("div");
+        questionDiv.className = "question";
+    
+        questionDiv.innerHTML = `
+            <div>
+                <label>Question</label>
+                <input type="text" name="questions[]">
+                <button type="button" class="add-answer">Add Answer</button>
+            </div>
+            <input type="hidden" name="answers[]" class="answer-input">
+            <div class="answers-container">
+                <!-- Answers will be added here -->
+            </div>
         `;
-        answersContainer.appendChild(answerDiv);
-
-        updateAnswers(answerInput, answersContainer);
+    
+        container.appendChild(questionDiv);
+    
+        questionDiv.querySelector(".add-answer").addEventListener("click", function () {
+            const answersContainer = questionDiv.querySelector(".answers-container");
+            const answerInput = questionDiv.querySelector(".answer-input");
+            const answerDiv = document.createElement("div");
+            answerDiv.className = "answer";
+    
+            answerDiv.innerHTML = `
+                <input type="text" class="individual-answer">
+                <label>
+                    <input type="checkbox" class="correct-answer"> Correct Answer
+                </label>
+            `;
+            answersContainer.appendChild(answerDiv);
+    
+            updateAnswers(answerInput, answersContainer);
+        });
     }
-});
-
-function updateAnswers(answerInput, answersContainer) {
-    let answers = [];
-    let correctAnswers = [];
-
-    const answerElements = answersContainer.querySelectorAll(".individual-answer");
-    const correctElements = answersContainer.querySelectorAll(".correct-answer");
-
-    answerElements.forEach((input, index) => {
-        answers.push(input.value);
-        const isChecked = correctElements[index] && correctElements[index].checked;
-        correctAnswers.push(isChecked ? "true" : "false");
+    
+    document.getElementById("add-question").addEventListener("click", addQuestionContainer);
+    
+    document.querySelector("form").addEventListener("submit", function () {
+        const answerInputs = document.querySelectorAll('input[name="answers[]"]');
+        const answersContainers = document.querySelectorAll(".answers-container");
+        
+        answerInputs.forEach((answerInput, index) => {
+            updateAnswers(answerInput, answersContainers[index]);
+        });
     });
-
-    answerInput.value = answers.join(";") + "|" + correctAnswers.join(";");
-}
-
-
-</script>
+    
+    function updateAnswers(answerInput, answersContainer) {
+        let answers = [];
+        let correctAnswers = [];
+    
+        const answerElements = answersContainer.querySelectorAll(".individual-answer");
+        const correctElements = answersContainer.querySelectorAll(".correct-answer");
+    
+        answerElements.forEach((input, index) => {
+            answers.push(input.value);
+            const isChecked = correctElements[index] && correctElements[index].checked;
+            correctAnswers.push(isChecked ? "true" : "false");
+        });
+    
+        answerInput.value = answers.join(";") + "|" + correctAnswers.join(";");
+    }
+    </script>
 
 <style>
     body {
